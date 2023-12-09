@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "github.com/rosenthall/setta-auth/internal/api/";
+
+// Importing necessary dependencies for JWT
+import "google/protobuf/empty.proto";
+
+service AuthService {
+  // Registers a new user
+  rpc RegisterUser (RegisterRequest) returns (AuthResponse);
+
+  // Authenticates a user and issues a token
+  rpc AuthenticateUser (AuthRequest) returns (AuthResponse);
+
+  // Refreshes the JWT
+  rpc RefreshToken (TokenRefreshRequest) returns (AuthResponse);
+
+  // Validates the JWT
+  rpc ValidateToken (TokenValidationRequest) returns (google.protobuf.Empty);
+}
+
+// Request for user registration
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// Request for user authentication
+message AuthRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// Response for authentication/registration
+message AuthResponse {
+  string token = 1;
+}
+
+// Request for token refresh
+message TokenRefreshRequest {
+  string current_token = 1;
+}
+
+// Request for token validation
+message TokenValidationRequest {
+  string token = 1;
+}
