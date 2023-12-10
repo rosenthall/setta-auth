@@ -1,0 +1,6 @@
+[AuthService]
+port = 8080
+private_key_path = "/private.pem"
+public_key_path = "/private.pem"
+token_ttl = 24
+log_level = "debug"
