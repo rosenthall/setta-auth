@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "github.com/rosenthall/setta-auth/internal/api/";
+option go_package = "setta-auth/internal/api/";
 
 // Service for handling JWT operations.
 service AuthService {
