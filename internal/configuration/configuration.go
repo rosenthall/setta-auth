@@ -12,6 +12,8 @@ type AuthServiceConfig struct {
 	PublicKeyPath  string `mapstructure:"public_key_path"`
 	TokenLifeTime  uint   `mapstructure:"token_ttl"`
 	LogLevel       string `mapstructure:"log_level"`
+	RedisServerIp  string `mapstructure:"redis_address"`
+	RedisPassword  string `mapstructure:"redis_password"`
 }
 
 // ReadConfig reads configuration file in specified dir and deserializes it
@@ -31,7 +33,13 @@ func ReadConfig(path string) (*AuthServiceConfig, error) {
 	}
 
 	// Checking if there nil/0/"" fields in config
-	if config.Port == 0 || config.PrivateKeyPath == "" || config.PublicKeyPath == "" || config.TokenLifeTime == 0 || config.LogLevel == "" {
+	if config.Port == 0 ||
+		config.PrivateKeyPath == "" ||
+		config.PublicKeyPath == "" ||
+		config.TokenLifeTime == 0 ||
+		config.LogLevel == "" ||
+		config.RedisServerIp == "" ||
+		config.RedisPassword == "" {
 		return nil, errors.New("missing required fields in configuration")
 	}
 

@@ -4,6 +4,7 @@ import (
 	"auth_service/internal/configuration"
 	"auth_service/internal/server"
 	service "auth_service/internal/services/auth"
+	"context"
 	"log"
 )
 
@@ -30,6 +31,12 @@ func Run(config *configuration.AuthServiceConfig) {
 		panic(privateKeyError)
 	}
 	logger.Debugf("Private key size : %#v ", privateKey.Size())
+
+	logger.Info("Connecting to redis server..")
+	redisClient, redisErr := getRedisConnection(context.Background(), config.RedisServerIp, config.RedisPassword)
+	if redisErr != nil {
+		panic(redisClient)
+	}
 
 	jwtAuthService, _ := service.NewJWTAuthService(config, logger, privateKey, publicKey)
 
