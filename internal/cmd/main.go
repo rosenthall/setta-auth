@@ -2,6 +2,8 @@ package main
 
 import (
 	"auth_service/internal/configuration"
+	"auth_service/internal/server"
+	service "auth_service/internal/services"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
@@ -21,7 +23,13 @@ func main() {
 
 	logger.Info("Logger has successfully initialized")
 
-	// ...
+	jwtAuthService, _ := service.NewJWTAuthService(config, logger)
+
+	grpcServer := server.NewServer(config, logger, jwtAuthService)
+	err := grpcServer.Run()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func getLogger(cfg *configuration.AuthServiceConfig) (*zap.SugaredLogger, error) {
