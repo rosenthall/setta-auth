@@ -33,10 +33,13 @@ func Run(config *configuration.AuthServiceConfig) {
 	logger.Debugf("Private key size : %#v ", privateKey.Size())
 
 	logger.Info("Connecting to redis server..")
-	redisClient, redisErr := getRedisConnection(context.Background(), config.RedisServerIp, config.RedisPassword)
+	redisClient, redisErr := getRedisConnection(context.Background(), config.RedisServerIp, config.RedisPassword, logger)
 	if redisErr != nil {
-		panic(redisClient)
+		panic(redisErr)
 	}
+	defer redisClient.Close() // Closing connection there
+
+	logger.Info("Successfully connected!")
 
 	jwtAuthService, _ := service.NewJWTAuthService(config, logger, privateKey, publicKey)
 
