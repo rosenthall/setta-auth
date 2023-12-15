@@ -11,7 +11,7 @@ run:
 generate-keys:
 	@mkdir -p ../keys
 	@openssl genpkey -algorithm RSA -out ../keys/private_key.pem -pkeyopt rsa_keygen_bits:2048
-	@openssl rsa -pubout -in ../keys/private_key.pem -out ../keys/public_key.pem
+	@openssl rsa -in ../keys/private_key.pem -pubout -out ../keys/public_key.pem
 	@echo "Keys generated in keys/ directory"
 
 setup-redis:
