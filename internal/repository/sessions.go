@@ -59,7 +59,7 @@ func (r *RedisRefreshSessionsRepository) InsertRefreshSession(ctx context.Contex
 	return nil
 }
 
-func NewRedisSessionsRepository(client *redis.Client, logger zap.SugaredLogger) *RedisRefreshSessionsRepository {
+func NewRedisRepository(client *redis.Client, logger zap.SugaredLogger) *RedisRefreshSessionsRepository {
 	return &RedisRefreshSessionsRepository{
 		client: client,
 		log:    logger,

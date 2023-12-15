@@ -3,7 +3,7 @@ package server
 import (
 	pb "auth_service/internal/api"
 	"auth_service/internal/configuration"
-	auth "auth_service/internal/services"
+	"auth_service/internal/services/auth"
 	"context"
 	"fmt"
 	"go.uber.org/zap"
