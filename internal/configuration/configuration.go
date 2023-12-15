@@ -7,13 +7,14 @@ import (
 
 // AuthServiceConfig struct represents configuration of the project
 type AuthServiceConfig struct {
-	Port           uint   `mapstructure:"port"`
-	PrivateKeyPath string `mapstructure:"private_key_path"`
-	PublicKeyPath  string `mapstructure:"public_key_path"`
-	TokenLifeTime  uint   `mapstructure:"token_ttl"`
-	LogLevel       string `mapstructure:"log_level"`
-	RedisServerIp  string `mapstructure:"redis_address"`
-	RedisPassword  string `mapstructure:"redis_password"`
+	Port                 uint   `mapstructure:"port"`
+	PrivateKeyPath       string `mapstructure:"private_key_path"`
+	PublicKeyPath        string `mapstructure:"public_key_path"`
+	TokenLifeTime        uint   `mapstructure:"token_ttl"`
+	RefreshTokenLifeTime uint   `mapstructure:"refresh_token_ttl"`
+	LogLevel             string `mapstructure:"log_level"`
+	RedisServerIp        string `mapstructure:"redis_address"`
+	RedisPassword        string `mapstructure:"redis_password"`
 }
 
 // ReadConfig reads configuration file in specified dir and deserializes it
