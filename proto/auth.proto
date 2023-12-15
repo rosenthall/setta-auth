@@ -21,14 +21,18 @@ service AuthService {
 
 // Request for generating a token.
 message GenerateTokenRequest {
+  // User identifier for whom the token is being generated.
+  string user_id = 1;
   // Input data for token generation (e.g., user credentials).
-  UserData user_data = 1;
+  UserData user_data = 2;
 }
 
 // Token response.
 message TokenResponse {
-  // The generated JWT token.
-  string token = 1;
+  // The generated JWT access token.
+  string access_token = 1;
+  // The new refresh token.
+  string refresh_token = 2;
 }
 
 // Request for token validation.
@@ -41,14 +45,16 @@ message ValidateTokenRequest {
 message TokenValidationResponse {
   // The result of validation (valid or not).
   bool is_valid = 1;
-  // Additional information about the validation.
-  string message = 2;
 }
 
 // Request for token refresh.
 message RefreshTokenRequest {
-  // Existing JWT token to be refreshed.
-  string token = 1;
+  // User Identifier.
+  string user_id = 1;
+  // Existing JWT access token to be refreshed.
+  string access_token = 2;
+  // Refresh token used to obtain a new access token.
+  string refresh_token = 3;
 }
 
 // Request for extracting data from a token.
