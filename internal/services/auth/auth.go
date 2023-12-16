@@ -33,11 +33,11 @@ type JwtAuthService struct {
 	refreshTokenTTL time.Duration
 	tokenTTL        time.Duration
 
-	redisRepository repository.RedisRefreshSessionsRepository
+	redisRepository repository.RefreshSessionsRepository
 	log             *zap.SugaredLogger
 }
 
-func NewJWTAuthService(config *configuration.AuthServiceConfig, logger *zap.SugaredLogger, redisRepository repository.RedisRefreshSessionsRepository, privateKey *rsa.PrivateKey, publicKey *rsa.PublicKey) *JwtAuthService {
+func NewJWTAuthService(config *configuration.AuthServiceConfig, logger *zap.SugaredLogger, redisRepository repository.RefreshSessionsRepository, privateKey *rsa.PrivateKey, publicKey *rsa.PublicKey) *JwtAuthService {
 
 	// Converting refresh token TTL value from config to time.Duration
 	refreshTokenTTL := time.Hour * 24 * time.Duration(config.RefreshTokenLifeTime)

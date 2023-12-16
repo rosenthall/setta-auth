@@ -46,7 +46,7 @@ func Run(config *configuration.AuthServiceConfig) {
 	// Initializing our repository
 	redisRepository := repository.NewRedisRepository(redisClient, *logger)
 
-	jwtAuthService := service.NewJWTAuthService(config, logger, *redisRepository, privateKey, publicKey)
+	jwtAuthService := service.NewJWTAuthService(config, logger, redisRepository, privateKey, publicKey)
 
 	grpcServer := server.NewServer(config, logger, jwtAuthService)
 	err := grpcServer.Run()
