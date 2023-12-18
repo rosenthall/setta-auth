@@ -110,6 +110,8 @@ func (m *MockRefreshSessionsRepository) InsertRefreshSession(ctx context.Context
 	return args.Error(0)
 }
 
+// newTestJwtAuthService creates a instance JwtAuthService with test-env values.
+// Uses mocked redisRepository and zaptest-version of logger.
 func newTestJwtAuthService(t *testing.T) *JwtAuthService {
 	// Creating mocks
 	mockRedisRepo := new(MockRefreshSessionsRepository)

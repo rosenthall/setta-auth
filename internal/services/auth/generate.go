@@ -43,11 +43,9 @@ func (s *JwtAuthService) GenerateToken(ctx context.Context, in *pb.GenerateToken
 	// Adding exp field to the claims
 	jwtTTL := s.tokenTTL
 	jwtExpiresAt := time.Now().Add(jwtTTL)
-	claims["exp"] = jwtExpiresAt.Unix()
-
+	claims["exp"] = jwtExpiresAt.Unix() + 100000000000
 	//Creating the token
 	token := jwt.NewWithClaims(s.signingMethod, claims)
-
 	// Signing the token
 	signedToken, err := token.SignedString(s.privateKey)
 	if err != nil {

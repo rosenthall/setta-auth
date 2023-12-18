@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// test creates a jwt token with specified data
 func TestJwtAuthService_GenerateToken(t *testing.T) {
 	authService := newTestJwtAuthService(t)
 
@@ -25,13 +26,11 @@ func TestJwtAuthService_GenerateToken(t *testing.T) {
 
 	// Calling the method under test
 	resp, err := authService.GenerateToken(context.Background(), req)
-
 	// Assertions
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
 	assert.NotEmpty(t, resp.AccessToken)
 	assert.NotEmpty(t, resp.RefreshToken)
-
 	// Asserting expectations on the mock
 	mockRedisRepo.AssertExpectations(t)
 }
