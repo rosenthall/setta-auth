@@ -9,6 +9,9 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 // AuthServer contains all the state our service need.
@@ -36,11 +39,6 @@ func (s *AuthServer) ExtractTokenData(ctx context.Context, request *pb.ExtractTo
 	return s.appProvider.ExtractTokenData(ctx, request)
 }
 
-func (s *AuthServer) mustEmbedUnimplementedAuthServiceServer() {
-	//TODO implement me
-	panic("implement me")
-}
-
 // NewServer creates an instance of AuthServer.
 func NewServer(config *configuration.AuthServiceConfig, logger *zap.SugaredLogger, appProvider auth.Auth) *AuthServer {
 	grpcServer := grpc.NewServer()
@@ -62,7 +60,41 @@ func (s *AuthServer) Run() error {
 	// Registration of our service
 	pb.RegisterAuthServiceServer(s.grpcServer, s)
 
-	// Starting server
+	// Starting server in a separate goroutine
+	go func() {
+		if err := s.grpcServer.Serve(lis); err != nil {
+			s.logger.Errorf("Failed to serve: %v", err)
+		}
+	}()
 	s.logger.Info("Starting gRPC server on 127.0.0.1", address)
-	return s.grpcServer.Serve(lis)
+
+	// Setting up channel to listen for OS signals
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+
+	// Blocking until a signal is received
+	<-quit
+	s.logger.Info("Shutting down gRPC server...")
+
+	// Gracefully stopping the server
+	s.grpcServer.GracefulStop()
+
+	// Calling the Shutdown method of the auth service
+	if err := s.appProvider.Shutdown(); err != nil {
+		s.logger.Errorf("Failed to shutdown auth service: %v", err)
+		return err
+	}
+
+	s.logger.Info("Server gracefully stopped")
+	return nil
+}
+
+func (s *AuthServer) StopGracefully() {
+	s.logger.Info("Gracefully stopping gRPC server")
+	err := s.appProvider.Shutdown()
+	if err != nil {
+		return
+	}
+
+	s.grpcServer.GracefulStop()
 }

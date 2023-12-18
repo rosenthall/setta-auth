@@ -8,17 +8,17 @@ import (
 	"crypto/rsa"
 	"github.com/golang-jwt/jwt/v5"
 	"go.uber.org/zap"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"time"
 )
 
 // Auth defines the interface to interact with jwt tokens. Includes generating, validation, refreshing and data extraction.
+// Also defines Shutdown method to gracefully shutdown redis connection.
 type Auth interface {
 	GenerateToken(ctx context.Context, req *pb.GenerateTokenRequest) (*pb.TokenResponse, error)
 	ValidateToken(ctx context.Context, req *pb.ValidateTokenRequest) (*pb.TokenValidationResponse, error)
 	RefreshToken(ctx context.Context, req *pb.RefreshTokenRequest) (*pb.TokenResponse, error)
 	ExtractTokenData(ctx context.Context, req *pb.ExtractTokenDataRequest) (*pb.TokenDataResponse, error)
+	Shutdown() error
 }
 
 // JwtAuthService is the implementation of Auth .
@@ -56,6 +56,14 @@ func NewJWTAuthService(config *configuration.AuthServiceConfig, logger *zap.Suga
 	}
 }
 
-func (s *JwtAuthService) RefreshToken(ctx context.Context, in *pb.RefreshTokenRequest) (*pb.TokenResponse, error) {
-	return nil, status.Error(codes.InvalidArgument, "not implemented yet")
+func (s *JwtAuthService) Shutdown() error {
+
+	// Disconnecting from redis
+	if err := s.redisRepository.Disconnect(); err != nil {
+		s.log.Errorf("Failed to close Redis client: %v", err)
+		return err
+	}
+
+	s.log.Info("Successfully shut down the service")
+	return nil
 }

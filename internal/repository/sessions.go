@@ -24,6 +24,18 @@ type RedisRefreshSessionsRepository struct {
 	log    zap.SugaredLogger
 }
 
+// Disconnect closes redis connection
+func (s *RedisRefreshSessionsRepository) Disconnect() error {
+	if err := s.client.Close(); err != nil {
+		s.log.Errorf("Failed to close Redis client: %v", err)
+		return err
+	}
+
+	s.log.Info("Successfully closed redis connection!")
+	return nil
+}
+
+// GetRefreshSession retrieves a refresh session for a given user ID from Redis
 func (r *RedisRefreshSessionsRepository) GetRefreshSession(ctx context.Context, userId string) (*models.RefreshSession, error) {
 	result, err := r.client.Get(ctx, userId).Result()
 	if errors.Is(err, redis.Nil) {
