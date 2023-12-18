@@ -56,14 +56,6 @@ func NewJWTAuthService(config *configuration.AuthServiceConfig, logger *zap.Suga
 	}
 }
 
-func (s *JwtAuthService) ValidateToken(ctx context.Context, in *pb.ValidateTokenRequest) (*pb.TokenValidationResponse, error) {
-	return nil, status.Error(codes.InvalidArgument, "not implemented yet")
-}
-
 func (s *JwtAuthService) RefreshToken(ctx context.Context, in *pb.RefreshTokenRequest) (*pb.TokenResponse, error) {
-	return nil, status.Error(codes.InvalidArgument, "not implemented yet")
-}
-
-func (s *JwtAuthService) ExtractTokenData(ctx context.Context, in *pb.ExtractTokenDataRequest) (*pb.TokenDataResponse, error) {
 	return nil, status.Error(codes.InvalidArgument, "not implemented yet")
 }
