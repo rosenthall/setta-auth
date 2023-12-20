@@ -1,0 +1,9 @@
+[AuthService]
+port = 1300
+private_key_path = "/home/armagg/pet_project/auth_service/keys/private_key.pem"
+public_key_path = "/home/armagg/pet_project/auth_service/keys/public_key.pem"
+token_ttl = 60
+refresh_token_ttl = 14
+log_level = "debug"
+redis_address = "127.0.0.1:6379"
+redis_password = "QPTszALH527B6uGFnRewCk"

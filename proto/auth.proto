@@ -2,48 +2,77 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "github.com/rosenthall/setta-auth/internal/api/";
+option go_package = "setta-auth/internal/api/";
 
-// Importing necessary dependencies for JWT
-import "google/protobuf/empty.proto";
-
+// Service for handling JWT operations.
 service AuthService {
-  // Registers a new user
-  rpc RegisterUser (RegisterRequest) returns (AuthResponse);
+  // Generates a token based on provided data.
+  rpc GenerateToken(GenerateTokenRequest) returns (TokenResponse);
 
-  // Authenticates a user and issues a token
-  rpc AuthenticateUser (AuthRequest) returns (AuthResponse);
+  // Validates and verifies a token.
+  rpc ValidateToken(ValidateTokenRequest) returns (TokenValidationResponse);
 
-  // Refreshes the JWT
-  rpc RefreshToken (TokenRefreshRequest) returns (AuthResponse);
+  // Refreshes a JWT token.
+  rpc RefreshToken(RefreshTokenRequest) returns (TokenResponse);
 
-  // Validates the JWT
-  rpc ValidateToken (TokenValidationRequest) returns (google.protobuf.Empty);
+  // Extracts data from a token.
+  rpc ExtractTokenData(ExtractTokenDataRequest) returns (TokenDataResponse);
 }
 
-// Request for user registration
-message RegisterRequest {
-  string username = 1;
-  string password = 2;
+// Request for generating a token.
+message GenerateTokenRequest {
+  // User identifier for whom the token is being generated.
+  string user_id = 1;
+  // Input data for token generation (e.g., user credentials).
+  UserData user_data = 2;
 }
 
-// Request for user authentication
-message AuthRequest {
-  string username = 1;
-  string password = 2;
+// Token response.
+message TokenResponse {
+  // The generated JWT access token.
+  string access_token = 1;
+  // The new refresh token.
+  string refresh_token = 2;
 }
 
-// Response for authentication/registration
-message AuthResponse {
+// Request for token validation.
+message ValidateTokenRequest {
+  // JWT token to be validated.
   string token = 1;
 }
 
-// Request for token refresh
-message TokenRefreshRequest {
-  string current_token = 1;
+// Response for token validation.
+message TokenValidationResponse {
+  // The result of validation (valid or not).
+  bool is_valid = 1;
 }
 
-// Request for token validation
-message TokenValidationRequest {
+// Request for token refresh.
+message RefreshTokenRequest {
+  // User Identifier.
+  string user_id = 1;
+  // Existing JWT access token to be refreshed.
+  string access_token = 2;
+  // Refresh token used to obtain a new access token.
+  string refresh_token = 3;
+}
+
+// Request for extracting data from a token.
+message ExtractTokenDataRequest {
+  // JWT token from which to extract data.
   string token = 1;
+}
+
+// Response with token data.
+message TokenDataResponse {
+  // Extracted data from the token.
+  map<string, string> data = 1;
+}
+
+// Definition of user data.
+message UserData {
+  // User identifier.
+  string user_id = 1;
+  // Additional user data.
+  map<string, string> additional_data = 2;
 }
