@@ -5,11 +5,8 @@ build_protobuf:
 	--go-grpc_out=../internal/api --go-grpc_opt=paths=source_relative \
 	../proto/auth.proto
 
-run:
-	go run ../internal/cmd/main.go
-
 build:
-	go build -o target/auth ../internal/cmd/main.go
+	CGO_ENABLED=0 go build  -o target/auth ../internal/cmd/main.go
 
 generate-keys:
 	@mkdir -p ../keys
@@ -19,4 +16,7 @@ generate-keys:
 
 # Only for local development
 setup-redis:
-	redis-server ../redis.conf
+	sudo -S redis-server ../../infra/redis/auth_service/redis.conf
+
+run:
+	go run ../internal/cmd/main.go
