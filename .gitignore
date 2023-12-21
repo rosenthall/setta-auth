@@ -18,6 +18,7 @@
 
 dump.rdb
 keys/
+build/target/auth
 
 # Go workspace file
 go.work
