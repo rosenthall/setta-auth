@@ -5,6 +5,7 @@ go 1.21
 require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt/v5 v5.2.0
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/spf13/viper v1.18.1
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.26.0
