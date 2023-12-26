@@ -6,7 +6,7 @@ It provides GRPC api, that described in `protos/auth.proto`
 
 Available methods are :  token validating, refreshing, generating and data extracting.
 Service stores the JWT refresh-sessions via Redis.  
-RS256 signing alghoritm(sha256 with RSA 2028 bits keys) is used to provide better security.
+RS256 signing alghoritm(sha256 with RSA 2048 bits keys) is used to provide better security.
 
 ### Libraries stack
 
