@@ -3,6 +3,7 @@ package server
 import (
 	pb "auth_service/internal/api"
 	"auth_service/internal/configuration"
+	"auth_service/internal/server/middleware"
 	"auth_service/internal/services/auth"
 	"context"
 	"fmt"
@@ -41,7 +42,11 @@ func (s *AuthServer) ExtractTokenData(ctx context.Context, request *pb.ExtractTo
 
 // NewServer creates an instance of AuthServer.
 func NewServer(config *configuration.AuthServiceConfig, logger *zap.SugaredLogger, appProvider auth.Auth) *AuthServer {
-	grpcServer := grpc.NewServer()
+
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(middleware.UnaryLoggingInterceptor(logger)),
+	)
+
 	return &AuthServer{
 		grpcServer:  grpcServer,
 		config:      config,
